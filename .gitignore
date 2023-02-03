@@ -1,6 +1,7 @@
 # build output
 dist/
 .output/
+css/
 
 # dependencies
 node_modules/
@@ -13,7 +14,7 @@ pnpm-debug.log*
 
 
 # environment variables
-.env
+.env*
 .env.production
 
 # macOS-specific files
