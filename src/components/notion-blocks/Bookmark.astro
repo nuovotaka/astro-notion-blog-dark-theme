@@ -1,54 +1,70 @@
 ---
-import createMetascraper from 'metascraper'
-import metascraperDescription from 'metascraper-description'
-import metascraperImage from 'metascraper-image'
-import metascraperTitle from 'metascraper-title'
-import * as interfaces from '../../lib/interfaces.ts'
+import createMetascraper from "metascraper";
+import metascraperDescription from "metascraper-description";
+import metascraperImage from "metascraper-image";
+import metascraperTitle from "metascraper-title";
+import * as interfaces from "../../lib/interfaces.ts";
 
 export interface Props {
-  block: interfaces.Block
-  urlMap: { [key: string]: string }
+  block: interfaces.Block;
+  urlMap: { [key: string]: string };
 }
 
-const { block, urlMap } = Astro.props
+const { block, urlMap } = Astro.props;
 
-const urlString = (block.Bookmark || block.LinkPreview || block.Embed).Url
-const metascraper = createMetascraper([metascraperDescription(), metascraperImage(), metascraperTitle()])
+const urlString = (block.Bookmark || block.LinkPreview || block.Embed).Url;
+const metascraper = createMetascraper([
+  metascraperDescription(),
+  metascraperImage(),
+  metascraperTitle(),
+]);
 
-let url: URL
-let metadata: Record<string, string>
+let url: URL;
+let metadata: Record<string, string>;
 try {
-  url = new URL(urlString)
-  const html = urlMap[urlString]
+  url = new URL(urlString);
+  const html = urlMap[urlString];
   if (html) {
-    metadata = await metascraper({ html, url })
+    metadata = await metascraper({ html, url });
   }
 } catch (err) {
-  console.log(err)
+  console.log(err);
 }
 ---
 
-{url && (
-  <div class="bookmark">
-    <a href={url.toString()} target="_blank" rel="noopener noreferrer">
-      <div>
-        <div>{metadata && metadata.title}</div>
-        <div>{metadata && metadata.description}</div>
+{
+  url && (
+    <div class="bookmark">
+      <a href={url.toString()} target="_blank" rel="noopener noreferrer">
         <div>
+          <div>{metadata && metadata.title}</div>
+          <div>{metadata && metadata.description}</div>
           <div>
-            <img src={`https://www.google.com/s2/favicons?domain=${url.hostname}`} alt="title" loading="lazy" decoding="async" />
+            <div>
+              <img
+                src={`https://www.google.com/s2/favicons?domain=${url.hostname}`}
+                alt="title"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div>{url.origin}</div>
           </div>
-          <div>{url.origin}</div>
         </div>
-      </div>
-      <div>
-        {metadata && metadata.image && (
-            <img src={metadata.image} alt="title" loading="lazy" decoding="async" />
+        <div>
+          {metadata && metadata.image && (
+            <img
+              src={metadata.image}
+              alt="title"
+              loading="lazy"
+              decoding="async"
+            />
           )}
-      </div>
-    </a>
-  </div>
-)}
+        </div>
+      </a>
+    </div>
+  )
+}
 
 <style>
   .bookmark {
@@ -62,7 +78,7 @@ try {
     width: 100%;
     box-sizing: border-box;
     text-decoration: none;
-    border: 1px solid rgba(55, 53, 47, 0.16);
+    border: 1px solid var(--bookmark-border);
     border-radius: 3px;
     display: flex;
     overflow: hidden;
