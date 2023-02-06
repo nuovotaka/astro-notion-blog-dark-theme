@@ -161,9 +161,6 @@ const navItems = [
     cursor: pointer;
   }
 
-  input[type="checkbox"]:checked {
-    /* background: rgb(61, 61, 61); */
-  }
   input[type="checkbox"]::after {
     content: url("https://api.iconify.design/ph/sun.svg?color=%23fb923c&width=35&height=35");
     position: absolute;
@@ -179,7 +176,6 @@ const navItems = [
 </style>
 
 <script is:inline>
-  let theme = localStorage.getItem("data-theme");
   const changeThemeToDark = () => {
     document.documentElement.setAttribute("data-theme", "dark"); // set theme to dark
     localStorage.setItem("data-theme", "dark"); // save theme to local storage
