@@ -73,8 +73,8 @@ const navItems = [
           }
         </ul>
         <div class="check">
-          <input type="checkbox" id="switch" name="theme" /><label for="switch"
-          ></label>
+          <input type="checkbox" id="switch" name="theme" />
+          <label for="switch"></label>
         </div>
       </nav>
     </header>
@@ -176,24 +176,44 @@ const navItems = [
 </style>
 
 <script is:inline>
-  const changeThemeToDark = () => {
-    document.documentElement.setAttribute("data-theme", "dark"); // set theme to dark
-    localStorage.setItem("data-theme", "dark"); // save theme to local storage
-  };
+  const osDark = window.matchMedia("(prefers-color-scheme: dark)");
+  const modeSwitch = document.getElementById("switch");
 
-  const changeThemeToLight = () => {
-    document.documentElement.setAttribute("data-theme", "light"); // set theme light
-    localStorage.setItem("data-theme", "light"); // save theme to local storage
-  };
+  function darkModeOn() {
+    document.documentElement.setAttribute("data-theme", "dark");
+    modeSwitch.checked = true;
+  }
 
-  const checkbox = document.getElementById("switch");
-  // Apply retrived them to the website
-  checkbox.addEventListener("change", () => {
-    let theme = localStorage.getItem("data-theme"); // Retrieve saved them from local storage
-    if (theme === "dark") {
-      changeThemeToLight();
+  function darkModeOff() {
+    document.documentElement.setAttribute("data-theme", "light");
+    modeSwitch.checked = false;
+  }
+
+  const listener = (event) => {
+    if (event.matches) {
+      darkModeOn();
     } else {
-      changeThemeToDark();
+      darkModeOff();
     }
+  };
+
+  osDark.addEventListener("change", listener);
+  listener(osDark);
+
+  modeSwitch.addEventListener("change", () => {
+    if (modeSwitch.checked) {
+      darkModeOn();
+      style = "dark";
+    } else {
+      darkModeOff();
+      style = "light";
+    }
+    localStorage.setItem("data-theme", style);
   });
+
+  if (localStorage.getItem("data-theme") === "dark") {
+    darkModeOn();
+  } else if (localStorage.getItem("data-theme") === "light") {
+    darkModeOff();
+  }
 </script>
