@@ -21,7 +21,7 @@ const { heading, tags } = Astro.props;
       <ul>
         {tags.map((tag: SelectProperty) => (
           <li>
-            <a href={getTagLink(tag.name)} class={`${tag.color}-background`}>
+            <a href={getTagLink(tag.name)} class={`tag ${tag.color}`}>
               {tag.name}
             </a>
           </li>
